@@ -63,7 +63,7 @@ def main():
             
             l = line.strip()
             l = l.lower()
-            l = re.sub(r'[^a-zA-Z0-9áàâãéêíóôõúçüêè ]', ' ', l)
+            l = re.sub(r'[^a-zA-Z0-9áàâãéêíóôõúçüêè,.()%\- ]', '', l)
             l = l.strip()
             
             new_lines.append(l)

@@ -8,8 +8,9 @@ from tqdm import tqdm
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-def is_istoe_link(url):
-    return "istoe" in url.lower()
+ARCHIVE_MONTHS_PORTUGUESE = {   'JAN' : 'JANEIRO', 'FEB' : 'FEVEREIRO', 'MAR' : 'MARÇO', 'APR' : 'ABRIL',
+                            'MAY' : 'MAIO', 'JUN' : 'JUNHO', 'JUL' : 'JULHO', 'AUG' : 'AGOSTO', 'SEP' : 'SETEMBRO',
+                            'OCT' : 'OUTUBRO', 'NOV' : 'NOVEMBRO', 'DEC' : 'DEZEMBRO'}
 
 def get_texts_from_month(file, istoe_links_dir, news_dir, log_dir, options):
     month_title = file.split(".")[0].split("-")[1]
@@ -18,17 +19,14 @@ def get_texts_from_month(file, istoe_links_dir, news_dir, log_dir, options):
     
     _logs = []
     _all_texts = []
-    with tqdm(total=len(lines), desc=f"Links {month_title}: ", unit="l") as pb_links:
+    with tqdm(total=len(lines), desc=f"Links {ARCHIVE_MONTHS_PORTUGUESE[month_title]}: ", unit="l") as pb_links:
         for i, link in enumerate(lines):
-            if not is_istoe_link(link):
-                pb_links.update()
-                continue
             driver = webdriver.Chrome(options=options)
             
             try:
                 driver.get(link)
             except Exception:
-                _logs.append(f"Problema ao ler link {link.strip('\n')}")
+                _logs.append(f"Problema ao ler link {link.strip()}")
             
             sleep(3)
             
@@ -109,6 +107,8 @@ def main():
     _cur_number_threads = 0
     
     for file in _files_list:
+        if "OCT" in file or "SEP" in file: #  ----------> Temporário
+            continue
         try:
             if _cur_number_threads == _max_threads:
                 raise Exception
