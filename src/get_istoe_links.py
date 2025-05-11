@@ -7,6 +7,10 @@ from tqdm import tqdm
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
+ARCHIVE_MONTHS = {  "JAN" : 1, "FEB" : 2, "MAR" : 3, "APR" : 4, "MAY" : 5,
+                "JUN" : 6, "JUL" : 7, "AUG" : 8, "SEP" : 9, "OCT" : 10, 
+                "NOV": 11, "DEC" : 12 }
+
 def parse_args():
     # --
     # run: python get_istoe_links.py start=%m/%Y end=%m/%Y --headless
@@ -28,12 +32,25 @@ def parse_args():
     
     return start, end, headless
 
+def get_files_in_time_range(directory, start_date: datetime, end_date: datetime):
+    files = os.listdir(directory)
+    _files_in_time_range = []
+    
+    for file in files:
+        _, month, year = file.split('-')
+        _file_date = datetime(day=1, month=ARCHIVE_MONTHS[month], year=year)
+        
+        if start_date <= _file_date <= end_date:
+            _files_in_time_range.append(file)
+    
+    return _files_in_time_range
+
 def get_and_save_istoe_links(start_date: datetime, end_date: datetime, options):
     path_to_archive_links = os.path.join("data", "archive-links")
     istoe_links_dir = os.path.join("data", "istoe-links")
     log_dir = os.path.join("data", "logs")
     
-    _files_list = os.listdir(path_to_archive_links)
+    _files_list = get_files_in_time_range(path_to_archive_links, start_date, end_date)
     os.makedirs(istoe_links_dir, exist_ok=True)
     os.makedirs(log_dir, exist_ok=True)
     

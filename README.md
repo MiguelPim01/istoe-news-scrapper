@@ -28,10 +28,10 @@ This program was developed as part of an extension program at the Neologism's La
 
 ### Step 1: Collect links in internet archive
 
-Run the `get_arhive_links.py` script to collect links in internet archive.
+Run the `get_archive_links.py` script to collect links in internet archive.
 
 ```bash
-python src/get_arhive_links.py start=mm/yyyy end=mm/yyyy --headless
+python src/get_archive_links.py start=mm/yyyy end=mm/yyyy --headless
 ```
 
 - `start=mm/yyyy`: Specify the start date to collect links. For example, start=09/2024.

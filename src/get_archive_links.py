@@ -75,7 +75,7 @@ def get_archive_links(start_date: datetime, end_date: datetime, options):
                             
                             href_list.append(calendar_day.find_element(By.TAG_NAME, "a").get_attribute("href"))
                     
-                        months_links.append((month_title_pt, href_list))
+                        months_links.append((current_year, month_title_pt, href_list))
                     break
                 except:
                     pass
@@ -110,11 +110,11 @@ def main():
     # --
     # Saving each set of links into path "data/archive-links/"
     # --
-    for month, links in months_links:
+    for year, month, links in months_links:
         os.makedirs("data", exist_ok=True)
         os.makedirs("data/archive-links", exist_ok=True)
         
-        with open(f"data/archive-links/links-{month}.txt", "w") as file:
+        with open(f"data/archive-links/links-{month}-{year}.txt", "w") as file:
             file.write("\n".join(links))
 
 
