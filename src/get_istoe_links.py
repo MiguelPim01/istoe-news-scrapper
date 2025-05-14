@@ -32,12 +32,21 @@ def parse_args():
     
     return start, end, headless
 
+def get_month_year_from_file_name(file):
+    splited_file = file.split('-')
+    
+    desc = splited_file[0]
+    month = splited_file[1]
+    year = int(splited_file[2].split('.')[0])
+    
+    return desc, month, year
+
 def get_files_in_time_range(directory, start_date: datetime, end_date: datetime):
     files = os.listdir(directory)
     _files_in_time_range = []
     
     for file in files:
-        _, month, year = file.split('-')
+        _, month, year = get_month_year_from_file_name(file)
         _file_date = datetime(day=1, month=ARCHIVE_MONTHS[month], year=year)
         
         if start_date <= _file_date <= end_date:

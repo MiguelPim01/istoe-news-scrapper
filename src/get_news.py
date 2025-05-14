@@ -12,6 +12,10 @@ ARCHIVE_MONTHS_PORTUGUESE = {   'JAN' : 'JANEIRO', 'FEB' : 'FEVEREIRO', 'MAR' : 
                             'MAY' : 'MAIO', 'JUN' : 'JUNHO', 'JUL' : 'JULHO', 'AUG' : 'AGOSTO', 'SEP' : 'SETEMBRO',
                             'OCT' : 'OUTUBRO', 'NOV' : 'NOVEMBRO', 'DEC' : 'DEZEMBRO'}
 
+ARCHIVE_MONTHS = {  "JAN" : 1, "FEB" : 2, "MAR" : 3, "APR" : 4, "MAY" : 5,
+                "JUN" : 6, "JUL" : 7, "AUG" : 8, "SEP" : 9, "OCT" : 10, 
+                "NOV": 11, "DEC" : 12 }
+
 def get_texts_from_month(file, istoe_links_dir, news_dir, log_dir, options):
     month_title = file.split(".")[0].split("-")[1]
     with open(os.path.join(istoe_links_dir, file)) as f:
@@ -71,6 +75,28 @@ def parse_args():
     
     return start, end, headless
 
+def get_month_year_from_file_name(file):
+    splited_file = file.split('-')
+    
+    desc = splited_file[0]
+    month = splited_file[1]
+    year = int(splited_file[2].split('.')[0])
+    
+    return desc, month, year
+
+def get_files_in_time_range(directory, start_date: datetime, end_date: datetime):
+    files = os.listdir(directory)
+    _files_in_time_range = []
+    
+    for file in files:
+        _, month, year = get_month_year_from_file_name(file)
+        _file_date = datetime(day=1, month=ARCHIVE_MONTHS[month], year=year)
+        
+        if start_date <= _file_date <= end_date:
+            _files_in_time_range.append(file)
+    
+    return _files_in_time_range
+
 def main():
     start_date, end_date, headless = parse_args()
     
@@ -96,7 +122,7 @@ def main():
     os.makedirs(news_dir, exist_ok=True)
     os.makedirs(log_dir, exist_ok=True)
 
-    _files_list = os.listdir(istoe_links_dir)
+    _files_list = get_files_in_time_range(istoe_links_dir, start_date, end_date)
     
     # --
     # Creating threads for each month
@@ -107,8 +133,6 @@ def main():
     _cur_number_threads = 0
     
     for file in _files_list:
-        if "OCT" in file or "SEP" in file: #  ----------> Temporário
-            continue
         try:
             if _cur_number_threads == _max_threads:
                 raise Exception

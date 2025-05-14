@@ -3,6 +3,10 @@ import sys
 from datetime import datetime
 import re
 
+ARCHIVE_MONTHS = {  "JAN" : 1, "FEB" : 2, "MAR" : 3, "APR" : 4, "MAY" : 5,
+                "JUN" : 6, "JUL" : 7, "AUG" : 8, "SEP" : 9, "OCT" : 10, 
+                "NOV": 11, "DEC" : 12 }
+
 def parse_args():
     args = sys.argv
     
@@ -29,6 +33,28 @@ def is_unnecessary_line(row):
             or row == "Mundo"
             or row == "Esportes"
             or bool(re.fullmatch(r"\d{2}/\d{2}/\d{2,4} - \d{2}h\d{2}min", row)))
+    
+def get_month_year_from_file_name(file):
+    splited_file = file.split('-')
+    
+    desc = splited_file[0]
+    month = splited_file[1]
+    year = int(splited_file[2].split('.')[0])
+    
+    return desc, month, year
+
+def get_files_in_time_range(directory, start_date: datetime, end_date: datetime):
+    files = os.listdir(directory)
+    _files_in_time_range = []
+    
+    for file in files:
+        _, month, year = get_month_year_from_file_name(file)
+        _file_date = datetime(day=1, month=ARCHIVE_MONTHS[month], year=year)
+        
+        if start_date <= _file_date <= end_date:
+            _files_in_time_range.append(file)
+    
+    return _files_in_time_range
 
 def main():
     start_date, end_date = parse_args()
@@ -39,7 +65,7 @@ def main():
     final_news_dir = os.path.join("data", "final-news")
     news_dir = os.path.join("data", "news")
 
-    files = os.listdir(news_dir)
+    files = get_files_in_time_range(news_dir, start_date, end_date)
 
     os.makedirs(final_news_dir, exist_ok=True)
 
