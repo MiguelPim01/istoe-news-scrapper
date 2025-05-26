@@ -65,6 +65,7 @@ def get_and_save_istoe_links(start_date: datetime, end_date: datetime, options):
     
     for file in _files_list:
         month_title = file.split(".")[0].split("-")[1]
+        year = file.split(".")[0].split("-")[2]
         with open(os.path.join(path_to_archive_links, file)) as f:
             lines = f.readlines()
         
@@ -99,9 +100,9 @@ def get_and_save_istoe_links(start_date: datetime, end_date: datetime, options):
                 
                 driver.quit()
 
-        with open(os.path.join(istoe_links_dir, file), "w") as f, open(os.path.join(log_dir, f"istoe-links-log-{month_title}.txt"), "w") as log:
+        with open(os.path.join(istoe_links_dir, file), "w") as f, open(os.path.join(log_dir, f"istoe-links-log-{month_title}-{year}.txt"), "w") as log:
             f.write("\n".join(__all_months_links))
-            log.write(_logs)
+            log.write("\n".join(_logs))
 
 def main():
     start_date, end_date, headless = parse_args()

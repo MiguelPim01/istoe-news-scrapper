@@ -18,6 +18,7 @@ ARCHIVE_MONTHS = {  "JAN" : 1, "FEB" : 2, "MAR" : 3, "APR" : 4, "MAY" : 5,
 
 def get_texts_from_month(file, istoe_links_dir, news_dir, log_dir, options):
     month_title = file.split(".")[0].split("-")[1]
+    year = file.split(".")[0].split("-")[2]
     with open(os.path.join(istoe_links_dir, file)) as f:
         lines = f.readlines()
     
@@ -50,7 +51,7 @@ def get_texts_from_month(file, istoe_links_dir, news_dir, log_dir, options):
             pb_links.update()
             driver.quit()
         
-        with open(os.path.join(news_dir, f"news-{month_title}.txt"), "w") as f, open(os.path.join(log_dir, f"news-log-{month_title}.txt"), "w") as log:
+        with open(os.path.join(news_dir, f"news-{month_title}-{year}.txt"), "w") as f, open(os.path.join(log_dir, f"news-log-{month_title}-{year}.txt"), "w") as log:
             f.write("\n".join(_all_texts))
             log.write("\n".join(_logs))
 
