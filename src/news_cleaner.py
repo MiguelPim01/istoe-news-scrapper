@@ -20,8 +20,7 @@ def parse_args():
     return start, end
 
 def is_unnecessary_line(row):
-    return (row == "A ISTOÉ PUBLICAÇÕES LTDA é um portal digital independente e sem vinculação editorial e societária com a EDITORA TRES COMÉRCIO DE PUBLICACÕES LTDA (recuperação judicial). Informamos também que não realizamos cobranças e que também não oferecemos cancelamento do contrato de assinatura da revista impressa de nome ISTOÉ, tampouco autorizamos terceiros a fazê-lo, nos responsabilizamos apenas pelo conteúdo digital “https://istoe.com.br” e seus respectivos sites."
-            or row == "A ISTOE GERAL é uma editoria independente sem vinculação editorial e societária com A ISTOÉ PUBLICAÇÕES LTDA."
+    return ("A ISTOÉ PUBLICAÇÕES LTDA" in row
             or row == "Em"
             or row == "Atualizado em"
             or row == "Brasil"
@@ -32,7 +31,9 @@ def is_unnecessary_line(row):
             or row == "Opinião"
             or row == "Mundo"
             or row == "Esportes"
-            or bool(re.fullmatch(r"\d{2}/\d{2}/\d{2,4} - \d{2}h\d{2}min", row)))
+            or row == "DA REDAÇÃO"
+            or row == "i"
+            or bool(re.fullmatch(r"\d{2}/\d{2}/\d{2,4}\s*-\s*\d{1,2}[h:]\d{2}(min)?", row)))
     
 def get_month_year_from_file_name(file):
     splited_file = file.split('-')
@@ -77,6 +78,7 @@ def main():
 
     for file in files:
         month_title = file.split(".")[0].split("-")[1]
+        year = file.split(".")[0].split("-")[2]
         
         with open(os.path.join(news_dir, file), 'r') as f:
             lines = f.readlines()
@@ -94,7 +96,7 @@ def main():
             
             new_lines.append(l)
         
-        with open(os.path.join(final_news_dir, f"fnews-{month_title}.txt"), 'w') as f:
+        with open(os.path.join(final_news_dir, f"fnews-{month_title}-{year}.txt"), 'w') as f:
             f.write('\n'.join(new_lines))
         
         new_lines.clear()
