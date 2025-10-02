@@ -100,7 +100,7 @@ def main():
     if headless:
         options.add_argument("--headless")
 
-    options.page_load_strategy = "normal"
+    options.page_load_strategy = "eager"
     
     # --
     # Getting all links from internet archive
