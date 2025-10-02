@@ -33,6 +33,9 @@ def is_unnecessary_line(row):
             or row == "Esportes"
             or row == "DA REDAÇÃO"
             or row == "i"
+            or row == "Estadão Conteúdo"
+            or row == "Reuters"
+            or row == "Deutsche Welle"
             or bool(re.fullmatch(r"\d{2}/\d{2}/\d{2,4}\s*-\s*\d{1,2}[h:]\d{2}(min)?", row)))
     
 def get_month_year_from_file_name(file):
