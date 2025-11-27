@@ -67,7 +67,7 @@ python src/get_news.py start=mm/yyyy end=mm/yyyy --headless
 Run the `news_cleaner.py` script to clean all collected news.
 
 ```bash
-python src/news_cleaner.py start=mm/yyyy end=mm/yyyy --headless
+python src/news_cleaner.py start=mm/yyyy end=mm/yyyy
 ```
 
 - `start=mm/yyyy`: Specify the start date to clean news. For example, start=09/2024.

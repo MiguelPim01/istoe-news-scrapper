@@ -74,8 +74,8 @@ def main():
     os.makedirs(final_news_dir, exist_ok=True)
 
     # --
-    # Cleaning each line for each file
-    # We will turn all letters into lower case and mantain the brazilian portuguese vocabulary letters
+    # Cleaning line per line
+    # We will turn all letters into lower case and maintain the brazilian portuguese vocabulary letters
     # --
     new_lines = []
 
