@@ -26,7 +26,11 @@ def get_texts_from_month(file, istoe_links_dir, news_dir, log_dir, options):
     _all_texts = []
     with tqdm(total=len(lines), desc=f"Links {ARCHIVE_MONTHS_PORTUGUESE[month_title]}: ", unit="l") as pb_links:
         for i, link in enumerate(lines):
-            driver = webdriver.Chrome(options=options)
+            try:
+                driver = webdriver.Chrome(options=options)
+            except Exception:
+                _logs.append("Problema ao iniciar o webdriver do Chrome")
+                continue
             
             try:
                 driver.get(link)
